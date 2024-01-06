@@ -1,68 +1,52 @@
+from Game import Game
 import pygame
 import sys
-from play import play
 
-# Initialize Pygame
-pygame.init()
+class MainMenu:
+    def __init__(self):
+        pygame.init()
+        self.window_width = 600
+        self.window_height = 700
+        self.window = pygame.display.set_mode((self.window_width, self.window_height))
+        pygame.display.set_caption("Farewell to Kanar")
+        self.BLACK = (0, 0, 0)
+        self.title_font = pygame.font.Font(None, 64)
+        self.menu_font = pygame.font.Font(None, 32)
+        self.title_text = self.title_font.render("Farewell to Kanar", True, self.BLACK)
+        self.start_text = self.menu_font.render("Press SPACE to start", True, self.BLACK)
+        self.quit_text = self.menu_font.render("Press Q to quit", True, self.BLACK)
+        self.title_pos = self.title_text.get_rect(center=(self.window_width // 2, self.window_height // 8))
+        self.start_pos = self.start_text.get_rect(center=(self.window_width // 2, self.window_height // 4))
+        self.quit_pos = self.quit_text.get_rect(center=(self.window_width // 2, self.window_height * 2.5 // 8))
+        self.background_image = pygame.image.load('assets/menu.jpg')
+        self.FPS = 60
 
-# Set up the window
-window_width = 600
-window_height = 700
-window = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption("Farewell to Kanar")
+    def draw(self):
+        self.window.blit(self.background_image, (0, 0))
+        self.window.blit(self.title_text, self.title_pos)
+        self.window.blit(self.start_text, self.start_pos)
+        self.window.blit(self.quit_text, self.quit_pos)
+        pygame.display.update()
 
-# Set up colors
-BLACK = (0, 0, 0)
-
-# Set up fonts
-title_font = pygame.font.Font(None, 64)
-menu_font = pygame.font.Font(None, 32)
-
-# Render the text
-title_text = title_font.render("Farewell to Kanar", True, BLACK)
-start_text = menu_font.render("Press SPACE to start", True, BLACK)
-quit_text = menu_font.render("Press Q to quit", True, BLACK)
-
-
-# Set up menu position
-title_pos = title_text.get_rect(center=(window_width // 2, window_height // 8))
-start_pos = start_text.get_rect(center=(window_width // 2, window_height // 4))
-quit_pos = quit_text.get_rect(center=(window_width // 2, window_height * 2.5 // 8))
-
-background_image = pygame.image.load('menu.jpg')
-
-FPS = 60
-
-def draw():
-    window.blit(background_image, (0, 0))
-    window.blit(title_text, title_pos)
-    window.blit(start_text, start_pos)
-    window.blit(quit_text, quit_pos)
-    pygame.display.update()
-
-# Game loop
-
-def main():
-    clock = pygame.time.Clock()
-    running = True
-    in_game = False
-
-    while running:
-        clock.tick(FPS)
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    play()
-                elif event.key == pygame.K_q:
-                    # Quit the game
+    def run(self):
+        clock = pygame.time.Clock()
+        running = True
+        while running:
+            clock.tick(self.FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        game = Game()
+                        game.play()
+                    elif event.key == pygame.K_q:
+                        pygame.quit()
+                        sys.exit()
+            self.draw()
 
-        draw()
 
 if __name__ == '__main__':
-    main()
+    menu = MainMenu()
+    menu.run()

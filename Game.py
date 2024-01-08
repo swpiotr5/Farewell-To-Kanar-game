@@ -80,7 +80,9 @@ class Game:
             passengers.append(passenger_factory.create_passenger(x, y))
         
         fixed_passenger = passenger_factory.create_passenger(150, 120)
+        driver = passenger_factory.create_passenger(450, 620)
         passengers.append(fixed_passenger)
+        passengers.append(driver)
         return passengers
 
     def play(self):

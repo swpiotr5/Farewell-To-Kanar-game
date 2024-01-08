@@ -1,7 +1,13 @@
 import pygame
 
 class Person:
+    _instance = None
     player_speed = 0.3
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Person, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self, front_image_path, back_image_path, left_image_path, x, y):
         self.front_image = pygame.transform.scale(pygame.image.load(front_image_path), (30, 40))
@@ -11,6 +17,7 @@ class Person:
         self.current_image = self.front_image
         self.x = x
         self.y = y
+        self.initialized = True
 
     def draw(self, window):
         window.blit(self.current_image, (self.x, self.y))
